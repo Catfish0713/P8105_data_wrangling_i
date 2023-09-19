@@ -1,0 +1,71 @@
+---
+title: "template"
+author: "Ruixi Li"
+date: "2023-09-19"
+output: github_document
+---
+
+
+
+
+```{r}
+library(tidyverse)
+```
+
+let's import the "._FAS_litters.csv" csv.
+
+
+
+
+```{r}
+litters_df <- read.csv("data/data_import_examples/data_import_examples/FAS_litters.csv")
+
+litters_df <- janitor::clean_names(litters_df)
+```
+
+
+Import the same dataset using an absolute path.
+
+```{r}
+#litters_df_abs <- read.csv("~/Desktop")#avoid using absolute path,better in your .Rproj directories
+```
+
+
+
+
+
+
+import "FAS_pups.csv"
+```{r}
+pups_df <- read.csv("data/data_import_examples/data_import_examples/FAS_pups.csv")
+```
+
+```{r}
+#pups_df_abs <- read.csv("/Users/rl607/OneDrive/Documents/data_science_I/P8105_data_wrangling_i/data_import_examples/FAS_pups.csv")
+```
+
+
+
+
+
+```{r}
+head(litters_df)
+```
+
+
+```{r, eval=FALSE}
+view(litters_df)
+```
+
+
+
+look at a data summary
+
+```{r}
+str(litters_df)
+
+
+
+skimr::skim(litters_df)
+```
+
