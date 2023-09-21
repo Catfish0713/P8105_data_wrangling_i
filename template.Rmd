@@ -41,10 +41,8 @@ Import the same dataset using an absolute path.
 import "FAS_pups.csv"
 ```{r}
 pups_df <- read.csv("data/data_import_examples/data_import_examples/FAS_pups.csv")
-```
 
-```{r}
-pups_df_abs <- read.csv("/Users/rl607/OneDrive/Documents/data_science_I/P8105_data_wrangling_i/data/data_import_examples/data_import_examples/FAS_pups.csv")
+pups_df <- janitor::clean_names(pups_df)
 ```
 
 
@@ -67,12 +65,112 @@ look at a data summary
 ```{r}
 str(litters_df)
 
-
-
 skimr::skim(litters_df)
 ```
 
+## 'select'
 
+```{r}
+select(litters_df,group,litter_number,gd0_weight)
+
+select(litters_df, group, gd0_weight:gd_of_birth)
+
+select(litters_df, group, starts_with("pups"))
+
+select(litters_df, -litter_number)
+
+select(litters_df, -starts_with("pups"))
+
+select(litters_df, group, litter_id = litter_number)#rename a column
+
+select(litters_df, group, litter_id = litter_number, everything())
+
+select(litters_df, gd0_weight, everything())
+```
+
+'select' vs 'pull'
+
+```{r}
+select(litters_df, group)#dataframe in, datafram out
+pull(litters_df, group)#dataframe in, list out
+
+```
+
+```{r}
+rename(litters_df,litters_id = litter_number)
+
+relocate(litters_df,group, gd0_weight)
+```
+
+
+```{r}
+select(pups_df,litter_number,sex,pd_ears)
+```
+
+
+
+## `filter`
+get rid of rows using filter()`
+```{r}
+filter(litters_df, group =="Con7")
+
+filter(litters_df, !(group =="Mod8"))
+
+filter(litters_df, gd0_weight > 20)
+
+filter(litters_df, group == "Con7" | group == "Con8")
+
+filter(litters_df, group %in% c("Con3","Con7"))
+
+filter(litters_df, group == "Con7" & gd_of_birth == 20)
+
+
+```
+
+remove rows with missing 
+```{r}
+drop_na(litters_df, gd0_weight) #will remove rows for which wt_increase is missing.
+```
+
+
+## `mutate`
+
+
+```{r}
+mutate(litters_df, wt_gain = gd18_weight - gd0_weight)
+
+mutate(litters_df, group = str_to_lower(group))
+
+mutate(
+  litters_df,
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group))
+```
+
+
+## `arrange`
+
+```{r}
+view(arrange(litters_df, gd0_weight))
+
+view(arrange(litters_df, group, gd0_weight))
+```
+
+## `pipe`
+
+```{r}
+litter_df = 
+  read_csv("data/data_import_examples/data_import_examples/FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  select(-starts_with("pups")) %>%
+  mutate(
+    group = str_to_lower(group),
+    wt_gain = gd18_weight - gd0_weight,
+  ) %>%
+  drop_na(wt_gain) %>%
+  arrange(group, wt_gain)
+  )
+```
 
 
 
